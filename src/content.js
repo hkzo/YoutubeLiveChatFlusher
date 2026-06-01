@@ -4,7 +4,27 @@ self.browser ??= chrome;
 const isNotPip = () => !self.documentPictureInPicture?.window;
 
 const manifest = browser.runtime.getManifest();
+try {
 document.body.dataset.browser = 'browser_specific_settings' in manifest ? 'firefox' : 'chrome';
+}
+catch (e) {
+	console.warn('[ytlcf] Failed to set data-browser attribute on document.body:', e);
+	let tries = 0;
+	const intervalId = setInterval(() => {
+		tries++;
+		console.debug(`[ytlcf] trying to set data-browser attribute again...${tries}`);
+		if (document.body && document.body.dataset) {
+			clearInterval(intervalId);
+			console.info(`[ytlcf] Setting data-browser to ${'browser_specific_settings' in manifest ? 'firefox' : 'chrome'}`);
+			document.body.dataset.browser = 'browser_specific_settings' in manifest ? 'firefox' : 'chrome';
+			return;
+		}
+		if (tries >= 20) {
+			clearInterval(intervalId);
+			console.error('[ytlcf] Failed to set data-browser attribute after 20 attempts.');
+		}
+	}, 500);
+}
 
 // inject script
 self.addEventListener('ytlcf-message', e => {

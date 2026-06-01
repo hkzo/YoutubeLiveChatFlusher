@@ -54,7 +54,7 @@ export async function initialize(e) {
 		
 		state.succeeded = true;
 	}).catch(reason => {
-		console.warn(reason);
+		console.warn(`[ytlcf] Failed to initialize: ${reason}`);
 		state.succeeded = false;
 	});
 	if (state.succeeded) {
@@ -97,6 +97,7 @@ export async function initialize(e) {
  * @param { CustomEvent<NavigateFinishEventDetail> | { target: EventTarget, detail: NavigateFinishEventDetail } } e
  */
 async function onYtNavigateFinish(e) {
+	console.debug(`[ytlcf] Received yt-navigate-finish event, pageType=(${e.detail?.pageType})`);
 	if (e.detail?.pageType !== 'watch') return;
 	const toggle = state.controller?.player.querySelector('#yt-lcf-cb');
 	toggle?.setAttribute('aria-disabled', 'true');
@@ -104,6 +105,7 @@ async function onYtNavigateFinish(e) {
 	/** @type {?HTMLVideoElement | undefined} */
 	const video = (isNotPip() ? self : self.documentPictureInPicture?.window)?.document.querySelector('#movie_player video');
 	const videoContainer = video?.parentElement;
+	console.debug(`[ytlcf] videoContainer ${videoContainer ? 'found' : 'not found'}`);
 	if (!videoContainer) return;
 	const parent = videoContainer.parentElement;
 	if (state.controller?.layer && parent?.contains(state.controller.layer.element)) {
@@ -111,6 +113,7 @@ async function onYtNavigateFinish(e) {
 	}
 	const mainResponse = e.detail?.response;
 	const response = (mainResponse && 'contents' in mainResponse) ? mainResponse : mainResponse?.response;
+	console.debug(`[ytlcf] mainResponse ${mainResponse ? 'found' : 'not found'}, response ${response ? 'found' : 'not found'}`);
 	if (!response) return;
 	const videoDetails = mainResponse?.playerResponse?.videoDetails
 		|| mainResponse.contents?.twoColumnWatchNextResults?.results?.results?.contents?.at(0)?.videoPrimaryInfoRenderer?.viewCount?.videoViewCountRenderer;
@@ -159,7 +162,7 @@ async function onYtNavigateFinish(e) {
 				}
 			} else {
 				const message = `This video has no chat: ${videoDetails?.videoId || '[failed to get video id]'}`;
-				console.warn(message);
+				console.warn(`[ytlcf] ${message}, location.href=${location.href}`);
 			}
 			clearInterval(timer);
 			break;

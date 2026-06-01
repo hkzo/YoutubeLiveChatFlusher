@@ -68,6 +68,7 @@ export class LiveChatController {
 	}
 
 	async start() {
+		console.debug('[ytlcf] Start loading resources and initializing...');
 		/** @type {?HTMLVideoElement} */
 		const video = this.player.querySelector('#movie_player video');
 		const videoContainer = video?.parentElement;
@@ -100,6 +101,7 @@ export class LiveChatController {
 		this.layer.element.style.cssText += '--yt-lcf-layer-css: below;' + s.styles.layer_css;
 		await Promise.allSettled(promises);
 		this.#startSendingFrame(video);
+		console.debug('[ytlcf] Initialization is completed.');
 	}
 
 	async #setupViewerStyle() {
@@ -564,7 +566,7 @@ export class LiveChatController {
 	#addChatItem(action, callback) {
 		const item = action.addChatItemAction?.item;
 		if (!item) {
-			console.warn('Failed to add message.');
+			console.warn('[ytlcf] Failed to add message.');
 			return;
 		}
 		return renderChatItem(item, this.itemFactory).then(el => {
@@ -572,7 +574,7 @@ export class LiveChatController {
 			const text = el.getAttribute('data-text');
 			callback(el);
 			if (root.getElementById(el.id)) {
-				console.debug(`Message duplication #${el.id}: ${text || el.lastElementChild?.textContent}`);
+				console.debug(`[ytlcf] Message duplication #${el.id}: ${text || el.lastElementChild?.textContent}`);
 			} else {
 				/** @type { ["dense", "random"] } */
 				const modeOptions = ['dense', 'random'];

@@ -215,7 +215,7 @@ async function fetchAuthorInfo(renderer, type) {
 					name = pageTitle;
 				}
 			} catch (reason) {
-				console.error(reason);
+				console.error(`[ytlcf] Failed to fetch author info: ${reason}`);
 			}
 		}
 	}
@@ -388,7 +388,7 @@ function translateNodesAsync(nodes, target, exceptionLangs) {
 			};
 			return browser.runtime.sendMessage({ translation });
 		} catch (reason) {
-			console.warn(reason, text);
+			console.warn(`[ytlcf] Failed to translate text: ${reason}`);
 			return null;
 		}
 	}));

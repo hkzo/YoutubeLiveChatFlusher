@@ -1,6 +1,7 @@
 // @ts-nocheck
 /** biome-ignore-all lint/complexity/useLiteralKeys: For recognize youtube data object */
 (() => {
+	console.debug(`[ytlcf] Content script is loaded, injecting the main script... ytInitialData: ${window['ytInitialData'] ? 'found' : 'NOT found'}, ytcfg: ${window['ytcfg'] ? 'found' : 'NOT found'}`);
 	const ev = new CustomEvent('ytlcf-message', {
 		detail: {
 			ytInitialData: JSON.stringify(window['ytInitialData']),

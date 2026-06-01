@@ -38,7 +38,7 @@ async function openPip(element, params) {
 	try {
 		void pipWindow.origin;
 	} catch {
-		console.error('Access to document picture-in-picture window was denied.');
+		console.error('[ytlcf] Access to document picture-in-picture window was denied.');
 		pipWindow.close();
 		return self;
 	}

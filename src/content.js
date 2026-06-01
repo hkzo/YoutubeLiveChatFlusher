@@ -32,7 +32,7 @@ self.addEventListener('ytlcf-message', e => {
 
 self.addEventListener('ytlcf-ready', e => {
 	e.stopImmediatePropagation();
-	console.info(`${manifest.name} is ready!`);
+	console.info(`[ytlcf] ${manifest.name} (${manifest.version}) is ready!`);
 }, { passive: true });
 
 document.addEventListener('yt-action', e => {

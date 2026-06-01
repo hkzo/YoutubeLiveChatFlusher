@@ -179,7 +179,7 @@ async function getContentsAsync(url, body) {
 		const json = await fetchInnerTube(url, body, { auth: true });
 		return json.continuationContents?.liveChatContinuation;
 	} catch (reason) {
-		console.error(reason);
+		console.error(`[ytlcf] Failed to fetch live chat contents: ${reason}`);
 		const c = {
 			liveChatReplayContinuationData: body,
 			invalidationContinuationData: body,
